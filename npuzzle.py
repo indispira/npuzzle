@@ -7,13 +7,17 @@ from ctypes.util import find_library
 # C Structure
 class Puzzle(ctypes.Structure):
   _fields_ = [
-    ('size', ctypes.c_char_p),
-    ('cells', ctypes.POINTER(ctypes.POINTER(c_uint))),
+  	('size', c_uint),
+    ('start', ctypes.POINTER(ctypes.POINTER(c_uint))),
+    ('goal', ctypes.POINTER(ctypes.POINTER(c_uint))),
   ]
 
 # C functions
 _libnpuzzle = ctypes.CDLL("./npuzzle.so")
-_libnpuzzle.print_puzzle.argtypes = [ctypes.POINTER(Puzzle)]
+_libnpuzzle.print_grid.argtypes = [ctypes.POINTER(ctypes.POINTER(c_uint)), c_uint]
+_libnpuzzle.create_goal.argtypes = [ctypes.POINTER(Puzzle)]
+# _libnpuzzle.create_goal.argtypes = [ctypes.c_uint]
+# _libnpuzzle.create_goal.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_uint))
 
 # Argument parser
 parser = argparse.ArgumentParser(prog='npuzzle.py', description='N-puzzle project')
@@ -86,26 +90,18 @@ try:
 			parser_error('Incorrect length of a line of puzzle')
 
 	# Allocate memory for the puzzle
-	puzzle['cells'] = (ctypes.POINTER(ctypes.c_uint) * (puzzle['size'] + 1))()
-	puzzle['cells'][puzzle['size']] = None
+	puzzle['start'] = (ctypes.POINTER(ctypes.c_uint) * (puzzle['size'] + 1))()
+	puzzle['start'][puzzle['size']] = None
 	for i, line in enumerate(data):
-		puzzle['cells'][i] = (ctypes.c_uint * puzzle['size'])()
+		puzzle['start'][i] = (ctypes.c_uint * puzzle['size'])()
 		for j, value in enumerate(line):
-			puzzle['cells'][i][j] = value
-
-	# c_sentence = (ctypes.c_char_p * (len(sequence[i]) + 1))()
- #      c_sentence[len(sequence[i])] = None
-
- #      j = 0
- #      while j < len(sequence[i]):
- #        c_token = (ctypes.c_char * (len(sequence[i][j]) + 1))()
- #        c_token = sequence[i][j].encode('utf-8')
-
-	# Create C Structure
-	# puzzle['cells'] = None
+			puzzle['start'][i][j] = value
 	c_puzzle = Puzzle(**puzzle)
-	_libnpuzzle.print_puzzle(ctypes.pointer(c_puzzle))
 
 except:
 	print("ERROR")
 	parser_error('')
+
+_libnpuzzle.print_grid(c_puzzle.start, c_puzzle.size)
+_libnpuzzle.create_goal(ctypes.pointer(c_puzzle), c_puzzle.size)
+_libnpuzzle.print_grid(c_puzzle.goal, c_puzzle.size)
