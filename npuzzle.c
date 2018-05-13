@@ -16,7 +16,7 @@ void					free_node(t_node *node)
 
 void					print_grid(unsigned int **grid, unsigned int size)
 {//printf("%s\n", __FUNCTION__);
-	printf("Size of the Puzzle: %d\n", size);
+	// printf("Size of the Puzzle: %d\n", size);
 	for (unsigned int i = 0; i < size; i++)
 	{
 		for (unsigned int j = 0; j < size; j++)
@@ -260,7 +260,7 @@ t_node				*create_node(t_puzzle *puzzle, unsigned int **grid)
 }
 
 void					compute_node(t_puzzle *puzzle, t_node *node)
-{printf("%s\n", __FUNCTION__);
+{//printf("%s\n", __FUNCTION__);
 	t_node	*check = NULL;
 
 	if (check_if_in_list(puzzle->closed, node->hash))
@@ -288,7 +288,7 @@ void					create_neighbors(t_puzzle	*puzzle, t_node *node)
 	// printf("Empty %u %u\n", x, y);
 	if (x > 0)
 	{
-		printf("LEFT\n");
+		// printf("LEFT\n");
 		new_grid = copy_grid(grid, size);
 		tmp = new_grid[y][x];
 		new_grid[y][x] = new_grid[y][x - 1];
@@ -298,7 +298,7 @@ void					create_neighbors(t_puzzle	*puzzle, t_node *node)
 	}
 	if (y > 0)
 	{
-		printf("UP\n");
+		// printf("UP\n");
 		new_grid = copy_grid(grid, size);
 		tmp = new_grid[y][x];
 		new_grid[y][x] = new_grid[y - 1][x];
@@ -308,7 +308,7 @@ void					create_neighbors(t_puzzle	*puzzle, t_node *node)
 	}
 	if (x < size - 1)
 	{
-		printf("RIGHT\n");
+		// printf("RIGHT\n");
 		new_grid = copy_grid(grid, size);
 		tmp = new_grid[y][x];
 		new_grid[y][x] = new_grid[y][x + 1];
@@ -318,7 +318,7 @@ void					create_neighbors(t_puzzle	*puzzle, t_node *node)
 	}
 	if (y < size - 1)
 	{
-		printf("DOWN\n");
+		// printf("DOWN\n");
 		new_grid = copy_grid(grid, size);
 		tmp = new_grid[y][x];
 		new_grid[y][x] = new_grid[y + 1][x];
@@ -338,7 +338,7 @@ unsigned int	astar(t_puzzle *puzzle)
 	{
 		printf("Step %02u %u\t\t\t%u\n", steps, node->hash, node->f);
 		// print_grid(node->grid, puzzle->size);
-		printf("Addr %p\n", node->next);
+		// printf("Addr %p\n", node->next);
 		if (steps > 15000)
 			return (0);
 		steps++;
