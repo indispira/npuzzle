@@ -174,6 +174,7 @@ t_node				*check_if_in_list(t_node *list, unsigned int hash)
 {//printf("%s\n", __FUNCTION__);
 	while (list)
 	{
+		// print_grid(list->grid, 3);
 		if (hash == list->hash)
 			break ;
 		list = list->next;
@@ -259,7 +260,7 @@ t_node				*create_node(t_puzzle *puzzle, unsigned int **grid)
 }
 
 void					compute_node(t_puzzle *puzzle, t_node *node)
-{//printf("%s\n", __FUNCTION__);
+{printf("%s\n", __FUNCTION__);
 	t_node	*check = NULL;
 
 	if (check_if_in_list(puzzle->closed, node->hash))
@@ -287,7 +288,7 @@ void					create_neighbors(t_puzzle	*puzzle, t_node *node)
 	// printf("Empty %u %u\n", x, y);
 	if (x > 0)
 	{
-		// printf("LEFT\n");
+		printf("LEFT\n");
 		new_grid = copy_grid(grid, size);
 		tmp = new_grid[y][x];
 		new_grid[y][x] = new_grid[y][x - 1];
@@ -297,7 +298,7 @@ void					create_neighbors(t_puzzle	*puzzle, t_node *node)
 	}
 	if (y > 0)
 	{
-		// printf("UP\n");
+		printf("UP\n");
 		new_grid = copy_grid(grid, size);
 		tmp = new_grid[y][x];
 		new_grid[y][x] = new_grid[y - 1][x];
@@ -307,7 +308,7 @@ void					create_neighbors(t_puzzle	*puzzle, t_node *node)
 	}
 	if (x < size - 1)
 	{
-		// printf("RIGHT\n");
+		printf("RIGHT\n");
 		new_grid = copy_grid(grid, size);
 		tmp = new_grid[y][x];
 		new_grid[y][x] = new_grid[y][x + 1];
@@ -317,7 +318,7 @@ void					create_neighbors(t_puzzle	*puzzle, t_node *node)
 	}
 	if (y < size - 1)
 	{
-		// printf("DOWN\n");
+		printf("DOWN\n");
 		new_grid = copy_grid(grid, size);
 		tmp = new_grid[y][x];
 		new_grid[y][x] = new_grid[y + 1][x];
@@ -337,6 +338,7 @@ unsigned int	astar(t_puzzle *puzzle)
 	{
 		printf("Step %02u %u\t\t\t%u\n", steps, node->hash, node->f);
 		// print_grid(node->grid, puzzle->size);
+		printf("Addr %p\n", node->next);
 		if (steps > 15000)
 			return (0);
 		steps++;
@@ -348,49 +350,52 @@ unsigned int	astar(t_puzzle *puzzle)
 	return (0);
 }
 
-// int main(void)
-// {
-// 	t_puzzle puzzle;
+int main(void)
+{
+	t_puzzle puzzle;
 
-// 	puzzle.size = 3;
-// 	puzzle.start = calloc(puzzle.size + 1, sizeof(unsigned int *));
-// 	for (unsigned int i = 0; i < puzzle.size; i++)
-// 	{
-// 		puzzle.start[i] = calloc(puzzle.size, sizeof(unsigned int));
-// 		if (i == 0)
-// 		{
+	puzzle.size = 3;
+	puzzle.start = calloc(puzzle.size + 1, sizeof(unsigned int *));
+	puzzle.goal = NULL;
+	puzzle.open = NULL;
+	puzzle.closed = NULL;
+	for (unsigned int i = 0; i < puzzle.size; i++)
+	{
+		puzzle.start[i] = calloc(puzzle.size, sizeof(unsigned int));
+		if (i == 0)
+		{
 // 			// puzzle.start[i][0] = 1;
 // 			// puzzle.start[i][1] = 0;
-// 			puzzle.start[i][0] = 1;
-// 			puzzle.start[i][1] = 6;
-// 			puzzle.start[i][2] = 0;
+			puzzle.start[i][0] = 1;
+			puzzle.start[i][1] = 6;
+			puzzle.start[i][2] = 0;
 // 			// puzzle.start[i][0] = 15;
 // 			// puzzle.start[i][1] = 11;
 // 			// puzzle.start[i][2] = 5;
 // 			// puzzle.start[i][3] = 0;
-// 		}
-// 		else if (i == 1)
-// 		{
+		}
+		else if (i == 1)
+		{
 // 			// puzzle.start[i][0] = 3;
 // 			// puzzle.start[i][1] = 2;
-// 			puzzle.start[i][0] = 3;
-// 			puzzle.start[i][1] = 7;
-// 			puzzle.start[i][2] = 4;
+			puzzle.start[i][0] = 3;
+			puzzle.start[i][1] = 7;
+			puzzle.start[i][2] = 4;
 // 			// puzzle.start[i][0] = 7;
 // 			// puzzle.start[i][1] = 4;
 // 			// puzzle.start[i][2] = 2;
 // 			// puzzle.start[i][3] = 6;
-// 		}
-// 		else if (i == 2)
-// 		{
-// 			puzzle.start[i][0] = 8;
-// 			puzzle.start[i][1] = 5;
-// 			puzzle.start[i][2] = 2;
+		}
+		else if (i == 2)
+		{
+			puzzle.start[i][0] = 8;
+			puzzle.start[i][1] = 5;
+			puzzle.start[i][2] = 2;
 // 			// puzzle.start[i][0] = 13;
 // 			// puzzle.start[i][1] = 12;
 // 			// puzzle.start[i][2] = 14;
 // 			// puzzle.start[i][3] = 3;
-// 		}
+		}
 // 		else if (i == 3)
 // 		{
 // 			puzzle.start[i][0] = 10;
@@ -398,15 +403,15 @@ unsigned int	astar(t_puzzle *puzzle)
 // 			puzzle.start[i][2] = 1;
 // 			puzzle.start[i][3] = 9;
 // 		}
-// 	}
-// 	create_goal(&puzzle, puzzle.size);
-// 	print_grid(puzzle.start, puzzle.size);
-// 	if (astar(&puzzle))
-// 		printf("Success!!!\n");
-// 	else
-// 		printf("Unsolvable...\n");
-// 	return (0);
-// }
+	}
+	create_goal(&puzzle, puzzle.size);
+	print_grid(puzzle.start, puzzle.size);
+	if (astar(&puzzle))
+		printf("Success!!!\n");
+	else
+		printf("Unsolvable...\n");
+	return (0);
+}
 
 
 

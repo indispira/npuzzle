@@ -1,6 +1,6 @@
 NAME =		npuzzle.so
 CC =			cc
-CFLAGS = 	-Wall -Werror -Wextra -g -std=c99 -O3 -D_GNU_SOURCE
+CFLAGS = 	-Wall -Werror -Wextra -g -std=c99 -O3 -D_GNU_SOURCE -fsanitize=address
 # LIBS = 		-lm
 SRCS =		npuzzle.c
 OBJS =		npuzzle.o

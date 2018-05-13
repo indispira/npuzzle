@@ -102,6 +102,8 @@ try:
     for j, value in enumerate(line):
       puzzle['start'][i][j] = value
   puzzle['goal'] = None
+  puzzle['open'] = None
+  puzzle['closed'] = None
   c_puzzle = Puzzle(**puzzle)
 
 except:
