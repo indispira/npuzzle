@@ -20,6 +20,8 @@ class Puzzle(ctypes.Structure):
     ('size', c_uint),
     ('start', ctypes.POINTER(ctypes.POINTER(c_uint))),
     ('goal', ctypes.POINTER(Node)),
+    ('open', ctypes.POINTER(Node)),
+    ('closed', ctypes.POINTER(Node)),
   ]
 
 # C functions
